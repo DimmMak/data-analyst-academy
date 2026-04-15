@@ -1,59 +1,128 @@
-# Data Analyst Academy — 7 Agent Self-Improving Training System
+# Data Analyst Academy — Self-Improving 7-Agent Training System
 
 A multi-agent system that trains you to become a job-ready data analyst — and gets smarter about how to teach YOU specifically after every session.
 
 ---
 
-## The Agents
+## The Problem This Solves
+
+Normal AI tutors are static. They teach the same way every time regardless of how you're actually doing. This system fixes that — it rewrites its own instructions based on your real performance data after every loop.
+
+---
+
+## The Three Layers
+
+### Layer 1 — The Agents (the workers)
+
+Seven specialized agents, each with one job:
 
 | Agent | Role | When to call |
 |---|---|---|
-| `.tutor` | Senior Data Analyst Teacher | Start of every loop |
-| `.project` | Project Designer | After .tutor teaches a concept |
-| `.examiner` | Brutal Grader | After you complete the exercise |
-| `.reviewer` | Senior Code Reviewer | After .examiner grades |
-| `.tracker` | Progress Manager | After .reviewer — closes the loop |
-| `.coach` | Accountability Coach | When you've been slacking |
-| `.interviewer` | FAANG Interview Simulator | Only after a full project is complete |
-| `.meta` | Self-Improvement Engine | Auto-triggered by .tracker |
+| `.tutor` | Teaches one concept deeply, gives one exercise, never gives answers | Start of every loop |
+| `.project` | Turns that concept into a real-world exercise | After .tutor |
+| `.examiner` | Grades your work harshly with a 1-10 score | After you submit work |
+| `.reviewer` | Reviews your code like a senior engineer | After .examiner |
+| `.tracker` | Reads everything, updates progress, closes the loop | After .reviewer |
+| `.coach` | Calls you out when you ghost the system | When you've been absent |
+| `.interviewer` | Simulates a real job interview | Only after a full project is complete |
+
+### Layer 2 — The Brain (.meta)
+
+After every completed loop, `.tracker` automatically triggers `.meta`. It:
+1. Reads your full performance history from `team-notes.md`
+2. Makes each agent argue their case in `agent-debates.md`
+   - *".examiner: user keeps failing joins two sessions in a row — slow down"*
+   - *".coach: user skipped 3 days after a hard grade — watch for this pattern"*
+3. Synthesizes the debate into a verdict
+4. Rewrites the `## DYNAMIC` section of every agent's skill file
+
+This is why the system improves — the agents literally have different instructions after every loop.
+
+### Layer 3 — The Manager (academy-manager)
+
+A system admin that sits above everything:
+
+| Command | What it does |
+|---|---|
+| `status` | Full system health + current progress |
+| `debates` | Full audit trail of every .meta debate |
+| `inspect [agent]` | See any agent's current DYNAMIC section |
+| `force-meta` | Manually trigger .meta without waiting for .tracker |
+| `history` | Every session entry ever logged |
+| `reset` | Wipe everything back to baseline (confirm required) |
+| `backup` | Commit + push current state to GitHub |
+| `health` | Verify all files are present and intact |
 
 ---
 
-## The Loop
+## The Two-Section Architecture
 
-```
-.tutor → .project → [you do the work] → .examiner → .reviewer → .tracker → .meta
-                                                                              ↓
-                                                               agents get smarter
-                                                                              ↓
-                                                                    repeat loop
-```
+Every agent skill file has two sections:
 
----
+**`## PERMANENT`** — the core identity. Never changes. `.meta` cannot touch it.
+> *"Grade harshly. Score 1-10. Hand to .reviewer."*
 
-## How It Self-Improves
-
-After every completed loop, `.tracker` triggers `.meta`.
-
-`.meta`:
-1. Reads all of `team-notes.md` — your full performance history
-2. Runs a debate: each agent argues what needs to change
-3. Writes the debate to `agent-debates.md` (full audit trail)
-4. Updates the `## DYNAMIC` section of each agent's skill file
-5. Next loop runs on smarter, more personalized agents
-
-**You influence the loop. You don't control it.**
-Your one input: fill in `User focus for next session` in `team-notes.md` before starting.
+**`## DYNAMIC`** — the personalization layer. Rewritten by `.meta` after every loop.
+> *"User keeps making this specific mistake. Watch for it. Push harder here."*
 
 ---
 
-## Shared Memory
+## Shared Memory Files
 
 | File | Purpose |
 |---|---|
-| `team-notes.md` | Every agent reads and writes here. The system's brain. |
-| `agent-debates.md` | Full log of every .meta debate and why instructions changed. |
+| `team-notes.md` | Every agent reads and writes here. The system's brain. Contains your full session history and the `User focus for next session` field — your one input into the system. |
+| `agent-debates.md` | Full audit trail of every .meta debate. See exactly why any agent changed. |
 | `CHANGELOG.md` | Design decisions, milestones, architecture updates. |
+
+---
+
+## The Full Loop
+
+```
+You type .tutor
+    → concept taught, exercise given
+
+You type .project
+    → real-world exercise designed
+
+You do the work on your laptop
+
+You type .examiner
+    → brutal grade, score logged
+
+You type .reviewer
+    → code review, patterns flagged
+
+You type .tracker
+    → progress updated, .meta triggered automatically
+        → agents debate in agent-debates.md
+        → DYNAMIC sections rewritten across all skill files
+        → next loop starts smarter
+```
+
+---
+
+## The One Rule
+
+**.meta has final say.** You cannot override what it decides about your agents. The system knows your weaknesses better than you do in the moment — because it reads the data, not your feelings about the session.
+
+Your only input is one line in `team-notes.md` before each session:
+```
+User focus for next session: ___
+```
+
+**You influence the loop. You don't control it.**
+
+---
+
+## How to Use
+
+1. Open Claude Code
+2. Type `/data-analyst-academy` to open the master hub
+3. Type `.tutor` to begin your first loop
+4. Follow the handoff chain
+5. Type `/academy-manager` to manage the system
 
 ---
 
@@ -61,10 +130,12 @@ Your one input: fill in `User focus for next session` in `team-notes.md` before 
 
 ```
 data-analyst-academy/
-├── README.md
-├── CHANGELOG.md
-├── team-notes.md
-├── agent-debates.md
+├── README.md                        ← You are here
+├── CHANGELOG.md                     ← Full design history
+├── team-notes.md                    ← Shared agent memory
+├── agent-debates.md                 ← .meta debate log
+├── data-analyst-academy.skill       ← Master orchestrator skill
+├── academy-manager.skill            ← System admin skill
 └── skills/
     ├── tutor/SKILL.md
     ├── project/SKILL.md
@@ -84,3 +155,4 @@ data-analyst-academy/
 - **.meta has final say.** The system knows your weaknesses better than you do in the moment.
 - **The debate is the feature.** `agent-debates.md` shows you exactly why the system changed — nothing is a black box.
 - **One input point.** You tell the system what you want to focus on. It decides how to weight that against what you actually need.
+- **PERMANENT protects identity. DYNAMIC drives improvement.** Core agent behavior never drifts. Personalization always grows.
